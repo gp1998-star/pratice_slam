@@ -27,7 +27,7 @@ int main()
     imu_q_r.normalize();
 
     Eigen::Quaternionf l_q_r=imu_q_l.conjugate()*imu_q_r;
-    Eigen::Vector3f l_p_r=imu_q_l.conjugate()*(imu_p_l-imu_p_r);
+    Eigen::Vector3f l_p_r=imu_q_l.conjugate()*(imu_p_r-imu_p_l);
 
     cout<<"右眼相机坐标系到左眼相机坐标系的旋转l_q_r为："<<l_q_r.coeffs() <<endl;
     cout<<"右眼相机坐标系到左眼相机坐标系的平移l_p_r为："<<l_p_r<<endl;
