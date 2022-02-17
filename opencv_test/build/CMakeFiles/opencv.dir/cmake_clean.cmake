@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/opencv.dir/matcher_point.cpp.o"
+  "CMakeFiles/opencv.dir/auto_BA.cpp.o"
   "opencv.pdb"
   "opencv"
 )

@@ -26,7 +26,7 @@ Eigen/StdVector
 Eigen/Geometry
 -
 
-/home/gp/桌面/gp_slam/opencv_test/matcher_point.cpp
+/home/gp/桌面/gp_slam/opencv_test/auto_BA.cpp
 iostream
 -
 opencv2/core/core.hpp

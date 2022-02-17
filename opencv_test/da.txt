@@ -1,0 +1,59 @@
+输入参数ｒ:
+-0.0778833,0.116185,-0.079433
+输入参数t:
+0.960242,0.0221641,0.278289
+
+
+R:
+[0.9901171022354562, 0.0745761830801889, 0.1187708582862517;
+ -0.08360553535281132, 0.9938256270573528, 0.07294338532333718;
+ -0.1125976834541116, -0.08215239449492155, 0.9902387317003505]
+t:
+[0.96024163652007;
+ 0.02216405179016532;
+ 0.2782889762486127]
+
+
+
+自定义
+Solver Summary (v 2.0.0-eigen-(3.3.4)-lapack-eigensparse-no_openmp)
+
+                                     Original                  Reduced
+Parameter blocks                           47                       47
+Parameters                                145                      145
+Residual blocks                            46                       46
+Residuals                                  92                       92
+
+Minimizer                        TRUST_REGION
+
+Dense linear algebra library            EIGEN
+Trust region strategy     LEVENBERG_MARQUARDT
+
+                                        Given                     Used
+Linear solver                     DENSE_SCHUR              DENSE_SCHUR
+Threads                                     1                        1
+Linear solver ordering              AUTOMATIC                     46,1
+Schur structure                         2,3,7                    2,3,d
+
+Cost:
+Initial                          1.043499e+12
+Final                            2.017571e+07
+Change                           1.043479e+12
+
+Minimizer iterations                       51
+Successful steps                           41
+Unsuccessful steps                         10
+
+Time (in seconds):
+Preprocessor                         0.000190
+
+  Residual only evaluation           0.006912 (50)
+  Jacobian & residual evaluation     0.034063 (41)
+  Linear solver                      0.001259 (50)
+Minimizer                            0.043783
+
+Postprocessor                        0.000009
+Total                                0.043985
+
+Termination:                   NO_CONVERGENCE (Maximum number of iterations reached. Number of iterations: 50.)
+

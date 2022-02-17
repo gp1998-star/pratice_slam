@@ -123,32 +123,32 @@ opencv/fast:
 	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/build
 .PHONY : opencv/fast
 
-matcher_point.o: matcher_point.cpp.o
+auto_BA.o: auto_BA.cpp.o
 
-.PHONY : matcher_point.o
+.PHONY : auto_BA.o
 
 # target to build an object file
-matcher_point.cpp.o:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/matcher_point.cpp.o
-.PHONY : matcher_point.cpp.o
+auto_BA.cpp.o:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.o
+.PHONY : auto_BA.cpp.o
 
-matcher_point.i: matcher_point.cpp.i
+auto_BA.i: auto_BA.cpp.i
 
-.PHONY : matcher_point.i
+.PHONY : auto_BA.i
 
 # target to preprocess a source file
-matcher_point.cpp.i:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/matcher_point.cpp.i
-.PHONY : matcher_point.cpp.i
+auto_BA.cpp.i:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.i
+.PHONY : auto_BA.cpp.i
 
-matcher_point.s: matcher_point.cpp.s
+auto_BA.s: auto_BA.cpp.s
 
-.PHONY : matcher_point.s
+.PHONY : auto_BA.s
 
 # target to generate assembly for a file
-matcher_point.cpp.s:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/matcher_point.cpp.s
-.PHONY : matcher_point.cpp.s
+auto_BA.cpp.s:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.s
+.PHONY : auto_BA.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... opencv"
 	@echo "... edit_cache"
-	@echo "... matcher_point.o"
-	@echo "... matcher_point.i"
-	@echo "... matcher_point.s"
+	@echo "... auto_BA.o"
+	@echo "... auto_BA.i"
+	@echo "... auto_BA.s"
 .PHONY : help
 
 

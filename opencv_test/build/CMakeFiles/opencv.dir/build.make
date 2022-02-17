@@ -57,38 +57,38 @@ include CMakeFiles/opencv.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/opencv.dir/flags.make
 
-CMakeFiles/opencv.dir/matcher_point.cpp.o: CMakeFiles/opencv.dir/flags.make
-CMakeFiles/opencv.dir/matcher_point.cpp.o: ../matcher_point.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gp/桌面/gp_slam/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/opencv.dir/matcher_point.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/matcher_point.cpp.o -c /home/gp/桌面/gp_slam/opencv_test/matcher_point.cpp
+CMakeFiles/opencv.dir/auto_BA.cpp.o: CMakeFiles/opencv.dir/flags.make
+CMakeFiles/opencv.dir/auto_BA.cpp.o: ../auto_BA.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/gp/桌面/gp_slam/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/opencv.dir/auto_BA.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/opencv.dir/auto_BA.cpp.o -c /home/gp/桌面/gp_slam/opencv_test/auto_BA.cpp
 
-CMakeFiles/opencv.dir/matcher_point.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/matcher_point.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gp/桌面/gp_slam/opencv_test/matcher_point.cpp > CMakeFiles/opencv.dir/matcher_point.cpp.i
+CMakeFiles/opencv.dir/auto_BA.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv.dir/auto_BA.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gp/桌面/gp_slam/opencv_test/auto_BA.cpp > CMakeFiles/opencv.dir/auto_BA.cpp.i
 
-CMakeFiles/opencv.dir/matcher_point.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/matcher_point.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gp/桌面/gp_slam/opencv_test/matcher_point.cpp -o CMakeFiles/opencv.dir/matcher_point.cpp.s
+CMakeFiles/opencv.dir/auto_BA.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv.dir/auto_BA.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gp/桌面/gp_slam/opencv_test/auto_BA.cpp -o CMakeFiles/opencv.dir/auto_BA.cpp.s
 
-CMakeFiles/opencv.dir/matcher_point.cpp.o.requires:
+CMakeFiles/opencv.dir/auto_BA.cpp.o.requires:
 
-.PHONY : CMakeFiles/opencv.dir/matcher_point.cpp.o.requires
+.PHONY : CMakeFiles/opencv.dir/auto_BA.cpp.o.requires
 
-CMakeFiles/opencv.dir/matcher_point.cpp.o.provides: CMakeFiles/opencv.dir/matcher_point.cpp.o.requires
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/matcher_point.cpp.o.provides.build
-.PHONY : CMakeFiles/opencv.dir/matcher_point.cpp.o.provides
+CMakeFiles/opencv.dir/auto_BA.cpp.o.provides: CMakeFiles/opencv.dir/auto_BA.cpp.o.requires
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.o.provides.build
+.PHONY : CMakeFiles/opencv.dir/auto_BA.cpp.o.provides
 
-CMakeFiles/opencv.dir/matcher_point.cpp.o.provides.build: CMakeFiles/opencv.dir/matcher_point.cpp.o
+CMakeFiles/opencv.dir/auto_BA.cpp.o.provides.build: CMakeFiles/opencv.dir/auto_BA.cpp.o
 
 
 # Object files for target opencv
 opencv_OBJECTS = \
-"CMakeFiles/opencv.dir/matcher_point.cpp.o"
+"CMakeFiles/opencv.dir/auto_BA.cpp.o"
 
 # External object files for target opencv
 opencv_EXTERNAL_OBJECTS =
 
-opencv: CMakeFiles/opencv.dir/matcher_point.cpp.o
+opencv: CMakeFiles/opencv.dir/auto_BA.cpp.o
 opencv: CMakeFiles/opencv.dir/build.make
 opencv: /usr/local/lib/libopencv_stitching.so.3.3.0
 opencv: /usr/local/lib/libopencv_superres.so.3.3.0
@@ -147,7 +147,7 @@ CMakeFiles/opencv.dir/build: opencv
 
 .PHONY : CMakeFiles/opencv.dir/build
 
-CMakeFiles/opencv.dir/requires: CMakeFiles/opencv.dir/matcher_point.cpp.o.requires
+CMakeFiles/opencv.dir/requires: CMakeFiles/opencv.dir/auto_BA.cpp.o.requires
 
 .PHONY : CMakeFiles/opencv.dir/requires
 

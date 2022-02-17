@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/gp/桌面/gp_slam/opencv_test/matcher_point.cpp" "/home/gp/桌面/gp_slam/opencv_test/build/CMakeFiles/opencv.dir/matcher_point.cpp.o"
+  "/home/gp/桌面/gp_slam/opencv_test/auto_BA.cpp" "/home/gp/桌面/gp_slam/opencv_test/build/CMakeFiles/opencv.dir/auto_BA.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
