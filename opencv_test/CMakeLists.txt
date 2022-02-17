@@ -1,0 +1,25 @@
+project(opencv)
+
+cmake_minimum_required(VERSION 3.10)
+set(SRC_LIST opencv.cpp)
+set(SRC_LIST undistort.cpp)
+set(SRC_LIST matcher_point.cpp)
+set(Sophus_DIR "/home/gp/slam/Sophus/build")
+set(Sophus_INCLUDE_DIRS  "/home/gp/slam/Sophus" )
+set(Sophus_LIBRARIES "/home/gp/slam/Sophus/build/libSophus.so")
+
+find_package(OpenCV 3.3.0 REQUIRED)
+find_package(Ceres  REQUIRED)
+find_package(gflags  REQUIRED)
+find_package(Sophus  REQUIRED)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIR})
+add_executable(opencv ${SRC_LIST})
+target_link_libraries(opencv ${OpenCV_LIBS} )
+target_link_libraries(opencv glog)
+target_link_libraries(opencv ${Sophus_LIBRARIES})
+include_directories("/usr/include/eigen3")
+include_directories("/usr/include/gflags")
+include_directories("/usr/include/glog")
+include_directories(${Sophus_INCLUDE_DIRS})
+ 
+
