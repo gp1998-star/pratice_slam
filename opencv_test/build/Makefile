@@ -123,32 +123,32 @@ opencv/fast:
 	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/build
 .PHONY : opencv/fast
 
-auto_BA.o: auto_BA.cpp.o
+opencv_pose_2d.o: opencv_pose_2d.cpp.o
 
-.PHONY : auto_BA.o
+.PHONY : opencv_pose_2d.o
 
 # target to build an object file
-auto_BA.cpp.o:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.o
-.PHONY : auto_BA.cpp.o
+opencv_pose_2d.cpp.o:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/opencv_pose_2d.cpp.o
+.PHONY : opencv_pose_2d.cpp.o
 
-auto_BA.i: auto_BA.cpp.i
+opencv_pose_2d.i: opencv_pose_2d.cpp.i
 
-.PHONY : auto_BA.i
+.PHONY : opencv_pose_2d.i
 
 # target to preprocess a source file
-auto_BA.cpp.i:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.i
-.PHONY : auto_BA.cpp.i
+opencv_pose_2d.cpp.i:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/opencv_pose_2d.cpp.i
+.PHONY : opencv_pose_2d.cpp.i
 
-auto_BA.s: auto_BA.cpp.s
+opencv_pose_2d.s: opencv_pose_2d.cpp.s
 
-.PHONY : auto_BA.s
+.PHONY : opencv_pose_2d.s
 
 # target to generate assembly for a file
-auto_BA.cpp.s:
-	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/auto_BA.cpp.s
-.PHONY : auto_BA.cpp.s
+opencv_pose_2d.cpp.s:
+	$(MAKE) -f CMakeFiles/opencv.dir/build.make CMakeFiles/opencv.dir/opencv_pose_2d.cpp.s
+.PHONY : opencv_pose_2d.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... opencv"
 	@echo "... edit_cache"
-	@echo "... auto_BA.o"
-	@echo "... auto_BA.i"
-	@echo "... auto_BA.s"
+	@echo "... opencv_pose_2d.o"
+	@echo "... opencv_pose_2d.i"
+	@echo "... opencv_pose_2d.s"
 .PHONY : help
 
 

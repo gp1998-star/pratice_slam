@@ -26,17 +26,21 @@ Point2d pixe12cam(const Point2d &p,const Mat&  K)
     );
 }
 
+
+/**
 //新版本
 struct ReprojectionError {
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    ReprojectionError(const double observed_X,const double observed_Y)
-      : observed_x(observed_X), observed_y(observed_Y){}    //或者obs_x?
+    ReprojectionError( const double u_,const double v_ )
+      : u(u_),v(v_){}    
     template <typename T>
-    bool operator()(const T* const ceres_rot, const T* const ceres_trans, const T* const point,T* residuals) const {
-    //step1: 读取平移旋转的数据，转换成为Eigen的格式
-    //新版本
+    bool operator()(const T* const rot_ceres, const T* const trans_ceres, const T* const point,T* residuals) const {
+
+    //cout<<"检查trans1:"<<endl<<ceres_trans[0]<<endl;  //<<","<<ceres_trans[1]<<","<<ceres_trans[2]
     T p[3];
-    ceres::AngleAxisRotatePoint(ceres_rot,point,p);
+    p=rot_ceres*point;
+    ceres::rota
+    //ceres::AngleAxisRotatePoint(ceres_rot,point,p);
     p[0]+=ceres_trans[0];
     p[1]+=ceres_trans[1];
     p[2]+=ceres_trans[2];
@@ -44,62 +48,21 @@ struct ReprojectionError {
     T yp = p[1] / p[2];
     T predicted_x = xp*458.654+367.215;
     T predicted_y = yp*457.296+248.375;
-    residuals[0] = predicted_x - observed_x;
-    residuals[1] = predicted_y - observed_y;
-    
+    residuals[0] = predicted_x - u;
+    residuals[1] = predicted_y - v;
+
     return true;
   }
   // Factory to hide the construction of the CostFunction object from
   // the client code.
-  static ceres::CostFunction* Create(const double observed_X,
-                                     const double observed_Y) {
+  static ceres::CostFunction* Create(const double u_,const double v_) {
     return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 3, 3, 3>(
-                new ReprojectionError(observed_X,observed_Y)));
+                new ReprojectionError(u_,v_)));
   }
-  double observed_x;
-  double observed_y;
+  double u,v;
+
 };
 
-/**
-void bundleAdjustmentCeres(const vector<Point3d> &points_3d_L, const vector<double> &observe_X ,const vector<double> &observe_Y ,const Eigen::VectorXd &pose_ceres ) {
-    //create problem
-    ceres::Problem problem;
-    //loss function for filter out outliers
-    ceres::LossFunction* loss_function = NULL;
-
-    //transform Sophus::SE3d to ceres data array
-    
-    double ceres_rot[3] = {pose_ceres(0),pose_ceres(1),pose_ceres(2)};
-    double ceres_trans[3] = {pose_ceres(3),pose_ceres(4),pose_ceres(5)};
-    cout<<"输入参数ｒ:"<<endl<<ceres_rot[0] <<","<<ceres_rot[1] <<","<<ceres_rot[2] << endl;
-    cout<<"输入参数t:"<<endl<<ceres_trans[0] <<","<<ceres_trans[1] <<","<<ceres_trans[2] << endl;
-
-    //cout << "measurement size is: " << points_2d.size() << endl;
-    for(size_t i = 0; i< points_3d_L.size(); ++i) {
-        double points_3d_l[3]={points_3d_L[i].x , points_3d_L[i].y , points_3d_L[i].z};
-        ceres::CostFunction* cost_function =
-        ReprojectionError::Create(observe_X[i],observe_Y[i]);//传递测量值到costFunction,右图的像素坐标
-        // cout << "Adding meaurement to ceres: point_3d: (" << points_3d[i].transpose()
-        //         << "). point_2d: (" << points_2d[i].transpose()
-        //         << "). Camera intrinsic matrix: " <<  endl << K_eigen << "[" << i << "]" << endl;
-        
-        problem.AddResidualBlock(cost_function,loss_function,ceres_rot,ceres_trans); //传递外参数 points_3d_l
-    }
-
-    // Make Ceres automatically detect the bundle structure. Note that the
-    // standard solver, SPARSE_NORMAL_CHOLESKY, also works fine but it is slower
-    // for standard bundle adjustment problems.
-    ceres::Solver::Options options;
-    options.linear_solver_type = ceres::DENSE_SCHUR;
-    options.minimizer_progress_to_stdout = true;
-
-    ceres::Solver::Summary summary;
-    ceres::Solve(options, &problem, &summary);
-    //std::cout << summary.FullReport() << "\n";
-    
-    cout << "Result r: " << endl << ceres_rot[0] <<","<<ceres_rot[1] <<","<<ceres_rot[2] << endl;
-    cout << "Result t: " << endl<<ceres_trans[0] <<","<<ceres_trans[1] <<","<<ceres_trans[2] << endl;
-}
 **/
 
 int main ( int argc, char** argv )
@@ -156,8 +119,8 @@ int main ( int argc, char** argv )
     min_dist = min_element( matches.begin(), matches.end(), [](const DMatch& m1, const DMatch& m2) {return m1.distance<m2.distance;} )->distance;
     max_dist = max_element( matches.begin(), matches.end(), [](const DMatch& m1, const DMatch& m2) {return m1.distance<m2.distance;} )->distance;
 
-    printf ( "-- Max dist : %f \n", max_dist );
-    printf ( "-- Min dist : %f \n", min_dist );
+    //printf ( "-- Max dist : %f \n", max_dist );
+    //printf ( "-- Min dist : %f \n", min_dist );
 
     //当描述子之间的距离大于两倍的最小距离时,即认为匹配有误.但有时候最小距离会非常小,设置一个经验值30作为下限.
     std::vector< DMatch > good_matches;
@@ -201,14 +164,7 @@ int main ( int argc, char** argv )
     }
     //cout<<"point1:"<<endl<<point2[0].x<<endl;
 
-    vector<double> obs_x,obs_y;
-    for(int i=0;i<point2.size();i++)
-    {
-        obs_x.push_back(point2[i].x);
-        obs_y.push_back(point2[i].y);
-        //cout<<"obs:"<<endl<<obs_x[i]<<endl;
-    }
-    //cout<<"obs:"<<endl<<obs_x<<endl;
+    
 
     //求基础矩阵
     vector<uchar>RansacStatus;
@@ -296,6 +252,7 @@ int main ( int argc, char** argv )
     triangulatePoints(T1,T2,pts_1,pts_2,point_4d);
     //cout<<"3Ｄ坐标："<<endl<<point_4d.col(1)<<endl;
     //非齐次坐标
+    cout<<"point_4d:"<<endl<<point_4d.col(0)<<endl;
     for(int i=0;i<point_4d.cols;i++)
     {
         Mat x=point_4d.col(i);
@@ -325,6 +282,10 @@ int main ( int argc, char** argv )
         Point3d observed3(observed2.at<double>(0,0),observed2.at<double>(1,0),observed2.at<double>(2,0));
         observed_R.push_back(observed3);   
     }
+    cout<<"左图3d坐标："<<endl<<observed_L[1]<<endl;
+    cout<<"右图3d坐标："<<endl<<observed_R[1]<<endl;
+
+
     VecVector3d pts_3d_L;
     VecVector3d pts_3d_R;
     for(int i = 0; i < observed_L.size(); i++) {
@@ -334,72 +295,105 @@ int main ( int argc, char** argv )
     //cout<<"左图3d坐标："<<endl<<pts_3d_L.size()<<endl;
     cout<<"右图3d坐标："<<endl<<pts_3d_R[2]<<endl;
 
-    //2:旋转矩阵－旋转向量
-    /**
+    //2:旋转矩阵－旋转向量  验证Ｒ，ｔ  
+    
     Eigen::Matrix3d rotation_matrix;
     rotation_matrix<<R.at<double>(0,0),R.at<double>(0,1),R.at<double>(0,2),
                     R.at<double>(1,0),R.at<double>(1,1),R.at<double>(1,2),
                     R.at<double>(2,0),R.at<double>(2,1),R.at<double>(2,2);
     cout<<"R:"<<endl<<rotation_matrix<<endl;
-    
+
+    Eigen::Vector3d trans_matrix;
+    trans_matrix<<t.at<double>(0,0),t.at<double>(1,0),t.at<double>(2,0);
+    cout<<"t:"<<endl<<trans_matrix.transpose()<<endl;
+
+    Eigen::Vector3d PL;
+    PL<<observed_L[1].x,observed_L[1].y,observed_L[1].z;
+    cout<<"PL:"<<endl<<PL<<endl;
+
+    Eigen::Vector3d PR=rotation_matrix*PL+trans_matrix;
+    cout<<"PR:"<<endl<<PR<<endl;
+
+
+    /**
     Eigen::AngleAxisd cere_r;
     cere_r.fromRotationMatrix(rotation_matrix);
     cout<<"cere_r:"<<endl<<cere_r.angle()*cere_r.axis()<<endl;
     **/
+
     Mat cere_r;
     cv::Rodrigues(R,cere_r);
+
+    /**
+    Mat cere_0;
+    Mat c_R=(Mat_<double>(3,3)<<1,0,0,0,1,0,0,0,1);
+    cv::Rodrigues(c_R,cere_0);
+    cout<<"cere_0:"<<cere_0.at<double>(0,0)<<","<<cere_0.at<double>(1,0)<<","<<cere_0.at<double>(2,0)<<endl;
+    **/
     //cout<<"cere_r:"<<endl<<cere_r<<endl;
     Eigen::VectorXd pose_ceres(6,1);
     pose_ceres<<cere_r.at<double>(0,0),cere_r.at<double>(1,0),cere_r.at<double>(2,0),t.at<double>(0,0),t.at<double>(1,0),t.at<double>(2,0);
     //cout<<"pose_ceres:"<<endl<<pose_ceres()<<endl;
 
-    /**
-    //为自定义雅克比输入pose
-    double para_Pose[7];
-    //Vector3d P = noise_cameras[i].translation();
-    para_Pose[0] = t.at<double>(0,0);
-    para_Pose[1] = t.at<double>(1,0);
-    para_Pose[2] = t.at<double>(2,0);
-
-    Eigen::Matrix3d  rot_matrix;
-    rot_matrix<<R.at<double>(0,0),R.at<double>(0,1),R.at<double>(0,2),
-                R.at<double>(1,0),R.at<double>(1,1),R.at<double>(1,2),
-                R.at<double>(2,0),R.at<double>(2,1),R.at<double>(2,2);
-    //cout<<"rot_matrix:"<<endl<<rot_matrix<<endl;
-    Eigen::Quaterniond q(rot_matrix);
-    para_Pose[3] = q.x();
-    para_Pose[4] = q.y();
-    para_Pose[5] = q.z();
-    para_Pose[6] = q.w();
-    //cout<<"para_Pose:"<<endl<<para_Pose[1]<<endl;
-    **/
-
     //bundleAdjustmentCeres(observed_L,obs_x,obs_y,pose_ceres);
     //××××××××××××写进函数中的autoＢＡ
     //定义初始值
     ceres::Problem problem;
-    double ceres_rot[3] = {pose_ceres(0),pose_ceres(1),pose_ceres(2)};
-    double ceres_trans[3] = {pose_ceres(3),pose_ceres(4),pose_ceres(5)};
-    cout<<"输入初始参数ｒ:"<<endl<<ceres_rot[0] <<","<<ceres_rot[1] <<","<<ceres_rot[2] << endl;
-    cout<<"输入初始参数t:"<<endl<<ceres_trans[0] <<","<<ceres_trans[1] <<","<<ceres_trans[2] << endl;
-    
-    //将３d坐标转换为double形式送入addresidualblock
-    double point_l[observed_L.size()][3];
+    //传入左右相机的像素观测点：observed_2d(point_L_x,point_L_x ; point_R_x,point_R_y)
+    double observed_2d[observed_L.size()][4]; 
     for(int i = 0; i < observed_L.size(); i++) {
-        point_l[i][0]=observed_L[i].x;
-        point_l[i][1]=observed_L[i].y;
-        point_l[i][2]=observed_L[i].z;
+        observed_2d[i][0]=point1[i].x;
+        observed_2d[i][1]=point1[i].y;
+        observed_2d[i][2]=point2[i].x;
+        observed_2d[i][3]=point2[i].y;
     }
-    cout<<"输入初始参数point:"<<endl<<point_l[0][0] <<","<<point_l[0][1] <<","<<point_l[0][2] << endl;
+    cout<<"L_2d:"<<endl<<observed_2d[1][0]<<","<<observed_2d[1][1]<<endl;
+    cout<<"R_2d:"<<endl<<observed_2d[1][2]<<","<<observed_2d[1][3]<<endl;
+    double plx=1.13243*458.654/0.0053779+367.215;
+    double ply=1.77608*457.296/0.0053779+248.375;
+    cout<<"plx,ply:"<<endl<<plx<<","<<ply<<endl;
+    //传入旋转和平移初始值
+    double ceres_rot[2][3] = {{0,0,0} , {pose_ceres(0),pose_ceres(1),pose_ceres(2)} };
+    double ceres_trans[2][3] = {{0,0,0} , {pose_ceres(3),pose_ceres(4),pose_ceres(5)} };
+    //double ceres_rot[3]={pose_ceres(0),pose_ceres(1),pose_ceres(2)};
+    //double ceres_trans[3]={pose_ceres(3),pose_ceres(4),pose_ceres(5)};
+    //cout<<"输入初始参数ｒ:"<<endl<<ceres_rot[0][0] <<","<<ceres_rot[1][1] <<","<<ceres_rot[0][2] << endl;
+    //cout<<"输入初始参数t:"<<endl<<ceres_trans[0][0] <<","<<ceres_trans[0][1] <<","<<ceres_trans[0][2] << endl;
+    //cout<<"输入初始参数ｒ:"<<endl<<ceres_rot[0]<<endl;
+    //传入左相机观测的３d点作为初始值：转换为double形式送入addresidualblock
+    double observed_3d[observed_L.size()][3];
+    for(int i = 0; i < observed_L.size(); i++) {
+        observed_3d[i][0]=observed_L[i].x;
+        observed_3d[i][1]=observed_L[i].y;
+        observed_3d[i][2]=observed_L[i].z;
+    }
+    //cout<<"输入初始参数point:"<<endl<<observed_3d[0][0] <<","<<observed_3d[0][1] <<","<<observed_3d[0][2] << endl;
 
-    for(size_t i = 0; i< observed_L.size(); ++i) {
-        //double points_3d_l[3]={points_3d_L[i].x , points_3d_L[i].y , points_3d_L[i].z};
-        ceres::CostFunction* cost_function =
-        ReprojectionError::Create(obs_x[i],obs_y[i]);//传递测量值到costFunction,右图的像素坐标
     
-        problem.AddResidualBlock(cost_function,NULL,ceres_rot,ceres_trans,point_l[i]); //传递外参数 points_3d_l,pts_3d_L[i].transpose()
-        
-    }
+    /**
+    for(int j=0;j<2;j++)    //两个相机观测帧，j=0左相机，j=1右相机
+    {
+        for(size_t i = 0; i< observed_L.size(); ++i)    //size对２d匹配的观测点数据（左相机，右相机）
+        {
+            ceres::CostFunction* cost_function =
+            ReprojectionError::Create(observed_2d[i][j],observed_2d[i][j+1]);//传递测量值到costFunction,右图的像素坐标
+            problem.AddResidualBlock(cost_function,NULL,rotation_matrix,trans_matrix,observed_3d[i]); //传递外参数 points_3d_l,pts_3d_L[i].transpose()   
+        }
+    }   
+
+    
+    //新的add和creat
+    for(int j=0;j<2;j++)    //两个相机观测帧，j=0左相机，j=1右相机
+    {
+        for(size_t i = 0; i< observed_L.size(); ++i)    //size对２d匹配的观测点数据（左相机，右相机）
+        {
+            ceres::CostFunction* cost_function =
+            ReprojectionError::Create(observed_2d[i][j],observed_2d[i][j+1]);//传递测量值到costFunction,右图的像素坐标
+            problem.AddResidualBlock(cost_function,NULL,ceres_rot[j],ceres_trans[j],observed_3d[i]); //传递外参数 points_3d_l,pts_3d_L[i].transpose()   
+        }
+    }   
+    
+
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
@@ -411,7 +405,8 @@ int main ( int argc, char** argv )
     cout << "Using ceres the camera pose estimation is: " << endl << pose_ceres.transpose() << endl;
     cout<<"优化后参数ｒ:"<<endl<<ceres_rot[0] <<","<<ceres_rot[1] <<","<<ceres_rot[2] << endl;
     cout<<"优化后参数t:"<<endl<<ceres_trans[0] <<","<<ceres_trans[1] <<","<<ceres_trans[2] << endl;
-    cout<<"优化后参数point1:"<<endl<<point_l[0][0] <<","<<point_l[0][1] <<","<<point_l[0][2] << endl;
-    cout << summary.FullReport() << "\n";
+F    //cout << summary.FullReport() << "\n";
+    **/
+    
     return 0;
 }
